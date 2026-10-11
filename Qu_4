@@ -1,0 +1,57 @@
+employees = {
+    "E101": {"name": "Aarav", "department": "Engineering", "salary": 50000},
+    "E102": {"name": "Sita", "department": "Marketing", "salary": 42000},
+    "E103": {"name": "Ram", "department": "Finance", "salary": 55000},
+    "E104": {"name": "Maya", "department": "Human Resources", "salary": 38000},
+    "E105": {"name": "Bikash", "department": "Sales", "salary": 45000},
+}
+
+
+def find_employee(employee_id):
+    if employee_id not in employees:
+        raise KeyError(employee_id)
+    return employees[employee_id]
+
+
+def calculate_yearly_salary(monthly_salary):
+    return monthly_salary * 12
+
+
+def increase_salary(employee, percentage):
+    employee["salary"] = employee["salary"] + employee["salary"] * percentage / 100
+    return employee["salary"]
+
+
+def main():
+    employee_id = input("Enter employee ID: ").strip().upper()
+    try:
+        employee = find_employee(employee_id)
+    except KeyError:
+        print(f"Error: employee ID '{employee_id}' does not exist.")
+        return
+
+    print(f"Name: {employee['name']}")
+    print(f"Department: {employee['department']}")
+
+    while True:
+        raw = input("Enter salary increase percentage: ").strip()
+        try:
+            percentage = float(raw)
+        except ValueError:
+            print("Invalid input. Please enter a number (for example, 10).")
+            continue
+        if percentage < 0:
+            print("Invalid input. The percentage cannot be negative.")
+            continue
+        break
+
+    old_salary = employee["salary"]
+    new_salary = increase_salary(employee, percentage)
+
+    print(f"Old salary: {old_salary:.2f}")
+    print(f"New salary: {new_salary:.2f}")
+    print(f"Yearly salary: {calculate_yearly_salary(new_salary):.2f}")
+
+
+if __name__ == "__main__":
+    main()

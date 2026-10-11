@@ -1,0 +1,83 @@
+products = {
+    "apple": {"price": 30, "quantity": 20},
+    "banana": {"price": 10, "quantity": 15},
+    "mango": {"price": 80, "quantity": 10},
+    "orange": {"price": 25, "quantity": 8},
+    "milk": {"price": 60, "quantity": 12},
+    "bread": {"price": 45, "quantity": 5},
+}
+
+cart = {}
+
+
+def add_to_cart(cart, product_name, quantity):
+    if product_name in cart:
+        cart[product_name] += quantity
+    else:
+        cart[product_name] = quantity
+
+
+def calculate_total(cart):
+    return sum(products[name]["price"] * qty for name, qty in cart.items())
+
+
+def display_cart(cart):
+    print("\nYour cart:")
+    if not cart:
+        print("  The cart is empty.")
+        return
+    for name, qty in cart.items():
+        price = products[name]["price"]
+        print(f"  {name}: {qty} x {price} = {qty * price}")
+
+
+def get_product():
+    name = input("Enter a product name (or 'done' to finish): ").strip().lower()
+    if name == "done":
+        return None
+    try:
+        products[name]
+        return name
+    except KeyError:
+        print(f"Sorry, '{name}' is not in our products.")
+        return get_product()
+
+
+def get_quantity(name):
+    while True:
+        try:
+            qty = int(input(f"How many {name}(s)? "))
+            if qty <= 0:
+                print("Please enter a number greater than 0.")
+                continue
+            available = products[name]["quantity"]
+            if qty > available:
+                print(f"Only {available} {name}(s) available. Please enter a smaller quantity.")
+                continue
+            return qty
+        except ValueError:
+            print("Invalid input. Please enter a whole number such as 2.")
+
+
+def main():
+    while True:
+        name = get_product()
+        if name is None:
+            break
+        qty = get_quantity(name)
+        already_in_cart = cart.get(name, 0)
+        if already_in_cart + qty > products[name]["quantity"]:
+            print(f"You already have {already_in_cart} in the cart. Only "
+                  f"{products[name]['quantity']} are available in total.")
+            continue
+        add_to_cart(cart, name, qty)
+        print(f"Added {qty} {name}(s) to the cart.")
+
+    display_cart(cart)
+    total = calculate_total(cart)
+    print("\n========== FINAL BILL ==========")
+    print(f"Total amount: {total}")
+    print("================================")
+
+
+main()

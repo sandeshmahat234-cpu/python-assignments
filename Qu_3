@@ -1,0 +1,72 @@
+books = [
+    {"title": "1984", "author": "George Orwell", "available": True},
+    {"title": "To Kill a Mockingbird", "author": "Harper Lee", "available": True},
+    {"title": "The Hobbit", "author": "J.R.R. Tolkien", "available": False},
+    {"title": "Pride and Prejudice", "author": "Jane Austen", "available": True},
+    {"title": "Dune", "author": "Frank Herbert", "available": True},
+]
+
+
+def search_book(title):
+    for book in books:
+        if book["title"].lower() == title.strip().lower():
+            return book
+    raise KeyError(title)
+
+
+def borrow_book(title):
+    book = search_book(title)
+    if not book["available"]:
+        print(f"Sorry, '{book['title']}' is already borrowed.")
+        return
+    book["available"] = False
+    print(f"You have borrowed '{book['title']}'.")
+
+
+def return_book(title):
+    book = search_book(title)
+    if book["available"]:
+        print(f"'{book['title']}' was not borrowed, so it cannot be returned.")
+        return
+    book["available"] = True
+    print(f"Thank you for returning '{book['title']}'.")
+
+
+def show_available_books():
+    available = [book for book in books if book["available"]]
+    if not available:
+        print("No books are currently available.")
+        return
+    print("\nAvailable books:")
+    for book in available:
+        print(f"  - {book['title']} by {book['author']}")
+
+
+def main():
+    while True:
+        print("\n1. Show available books")
+        print("2. Borrow a book")
+        print("3. Return a book")
+        print("4. Exit")
+        choice = input("Choose an option (1-4): ").strip()
+
+        if choice == "1":
+            show_available_books()
+        elif choice in ("2", "3"):
+            title = input("Enter book title: ")
+            try:
+                if choice == "2":
+                    borrow_book(title)
+                else:
+                    return_book(title)
+            except KeyError:
+                print(f"Error: no book titled '{title.strip()}' was found.")
+        elif choice == "4":
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid option. Please choose 1-4.")
+
+
+if __name__ == "__main__":
+    main()

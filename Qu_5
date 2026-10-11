@@ -1,0 +1,35 @@
+menu = {
+    "burger": 250,
+    "pizza": 450,
+    "pasta": 320,
+    "momo": 180,
+    "fried rice": 280,
+    "noodles": 220,
+    "sandwich": 150,
+    "coffee": 90,
+}
+
+TAX_RATE = 0.13  # 13% tax/service charge
+
+
+def display_menu():
+    print("\n--- Menu ---")
+    for item, price in menu.items():
+        print(f"{item.title():<12} Rs. {price}")
+
+
+def add_item(order, item_name, quantity):
+    order.append({"item": item_name, "quantity": quantity, "price": menu[item_name]})
+
+
+def calculate_bill(order):
+    subtotal = sum(entry["price"] * entry["quantity"] for entry in order)
+    tax = subtotal * TAX_RATE
+    return subtotal, tax, subtotal + tax
+
+
+def display_order(order):
+    print("\n--- Your Order ---")
+    for entry in order:
+        line_total = entry["price"] * entry["quantity"]
+        print(f"{entry['item'].title():<12} x{entry['quantity']:<3} Rs. {line_total}")
